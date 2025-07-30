@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Último video de Pulser8a</title>
+  <title>Último video de MonetRB</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -34,13 +34,13 @@
   </style>
 </head>
 <body>
-  <h1>📺 Último video de Pulser8a</h1>
+  <h1>📺 Último video de MonetRB</h1>
   <iframe id="youtube_video" allowfullscreen></iframe>
   <div id="mensaje-error"></div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-    const channelID = "UCiRJxHsNnt8gJdIK9Xs3o0g";
+    const channelID = "UCXzQ9zvZz9gQZfZzvZz9gQZQ"; // ID del canal MonetRB
     const reqURL = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelID;
 
     $.getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(reqURL), function(data) {
@@ -54,7 +54,7 @@
       }
     }).fail(function() {
       $("#youtube_video").remove();
-      $("#mensaje-error").text("Error al cargar el video. ¿El canal es público y tiene videos disponibles? 🤔");
+      $("#mensaje-error").text("Error al cargar el video. ¿El canal está público y tiene contenido disponible? 🤔");
     });
   </script>
 </body>
