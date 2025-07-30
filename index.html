@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Último video de Pulser8a</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    iframe {
+      width: 100%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #ff3333;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #ff3333;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    #mensaje-error {
+      color: #cccccc;
+      font-style: italic;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📺 Último video de Pulser8a</h1>
+  <iframe id="youtube_video" allowfullscreen></iframe>
+  <div id="mensaje-error"></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    const channelID = "UCiRJxHsNnt8gJdIK9Xs3o0g";
+    const reqURL = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelID;
+
+    $.getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(reqURL), function(data) {
+      if (data.items && data.items.length > 0) {
+        const videoLink = data.items[0].link;
+        const videoID = videoLink.split("v=")[1];
+        $("#youtube_video").attr("src", "https://www.youtube.com/embed/" + videoID + "?rel=0&autoplay=0");
+      } else {
+        $("#youtube_video").remove();
+        $("#mensaje-error").text("No se encontró ningún video público reciente 😢");
+      }
+    }).fail(function() {
+      $("#youtube_video").remove();
+      $("#mensaje-error").text("Error al cargar el video. ¿El canal es público y tiene videos disponibles? 🤔");
+    });
+  </script>
+</body>
+</html>
