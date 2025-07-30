@@ -3,61 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Último video de MonetRB</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #0f0f0f;
-      color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 40px;
+      padding: 20px;
     }
     iframe {
-      width: 100%;
-      max-width: 800px;
-      height: 450px;
       border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #ff3333;
-      margin-bottom: 20px;
-    }
-    h1 {
-      color: #ff3333;
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
-    #mensaje-error {
-      color: #cccccc;
-      font-style: italic;
-      margin-top: 10px;
+      width: 100%;
+      max-width: 720px;
+      height: 405px;
     }
   </style>
 </head>
 <body>
-  <h1>📺 Último video de MonetRB</h1>
-  <iframe id="youtube_video" allowfullscreen></iframe>
-  <div id="mensaje-error"></div>
+  <h1>Último video de MonetRB</h1>
+  <iframe id="videoFrame" allowfullscreen></iframe>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-    const channelID = "UCXzQ9zvZz9gQZfZzvZz9gQZQ"; // ID del canal MonetRB
-    const reqURL = "https://www.youtube.com/feeds/videos.xml?channel_id=" + channelID;
+    const channelID = "UCXzQ9zvZz9gQZfZzvZz9gQZQ";
+    const feedURL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelID}`;
+    const apiURL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedURL)}`;
 
-    $.getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(reqURL), function(data) {
-      if (data.items && data.items.length > 0) {
+    fetch(apiURL)
+      .then(response => response.json())
+      .then(data => {
         const videoLink = data.items[0].link;
-        const urlParams = new URLSearchParams(videoLink.split('?')[1]);
-        const videoID = urlParams.get('v');
-
-        $("#youtube_video").attr("src", "https://www.youtube.com/embed/" + videoID + "?rel=0&autoplay=0");
-      } else {
-        $("#youtube_video").remove();
-        $("#mensaje-error").text("No se encontró ningún video público reciente 😢");
-      }
-    }).fail(function() {
-      $("#youtube_video").remove();
-      $("#mensaje-error").text("Error al cargar el video. ¿El canal está público y tiene contenido disponible? 🤔");
-    });
+        const videoID = videoLink.split("v=")[1];
+        document.getElementById("videoFrame").src = `https://www.youtube.com/embed/${videoID}?rel=0&controls=1`;
+      })
+      .catch(error => {
+        console.error("Error al cargar el video:", error);
+      });
   </script>
 </body>
 </html>
